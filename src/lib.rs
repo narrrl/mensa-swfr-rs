@@ -77,7 +77,7 @@ impl UrlBuilder {
         if self.query.is_empty() {
             self.query = format!("{}={}", name, value);
         } else {
-            self.query = format!("&{}={}", name, value);
+            self.query = format!("{}&{}={}", self.query, name, value);
         }
         self
     }
