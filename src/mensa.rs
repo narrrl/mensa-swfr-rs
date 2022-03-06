@@ -14,6 +14,8 @@ pub struct Plan {
 pub struct Place {
     pub id: String,
     pub mensa: Mensa,
+    #[serde(rename = "tagesplan")]
+    days: Vec<Day>,
 }
 
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
@@ -21,8 +23,6 @@ pub struct Place {
 pub struct Mensa {
     #[serde(rename = "$value")]
     pub name: String,
-    #[serde(rename = "tagesplan")]
-    days: Vec<Day>,
 }
 
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
@@ -65,7 +65,6 @@ impl<'a> Plan {
 
     pub fn days(&'a self) -> HashMap<Weekday, &'a Day> {
         self.place
-            .mensa
             .days
             .iter()
             .map(|d| match d.weekday() {
