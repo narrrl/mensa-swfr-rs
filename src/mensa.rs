@@ -1,6 +1,6 @@
-use chrono::{Weekday, Utc, TimeZone, Date, Datelike};
+use chrono::{Date, Datelike, TimeZone, Utc, Weekday};
 use serde::{Deserialize, Serialize};
-use std::{fmt::Debug, error::Error};
+use std::{collections::HashMap, error::Error, fmt::Debug};
 
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
 #[serde(rename = "plan")]
@@ -60,18 +60,26 @@ pub struct Price {
 
 impl<'a> Plan {
     pub fn day(&'a self, day: Weekday) -> Option<&'a Day> {
-        self.place.mensa.days.get(day as usize)
+        self.days().get(&day).map(|d| *d)
     }
 
-    pub fn days(&'a self) -> Vec<&'a Day> {
-        self.place.mensa.days.iter().collect()
+    pub fn days(&'a self) -> HashMap<Weekday, &'a Day> {
+        self.place
+            .mensa
+            .days
+            .iter()
+            .map(|d| match d.weekday() {
+                Ok(w) => Some((w, d)),
+                Err(_) => None,
+            })
+            .filter_map(|x| x)
+            .collect::<HashMap<Weekday, &'a Day>>()
     }
 
     pub fn mensa_name(&'a self) -> &'a str {
         &self.place.mensa.name
     }
 }
-
 
 impl<'a> Day {
     pub fn weekday(&'a self) -> Result<Weekday, Box<dyn Error>> {
@@ -80,7 +88,11 @@ impl<'a> Day {
 
     pub fn to_chrono(&'a self) -> Result<Date<Utc>, Box<dyn Error>> {
         let v = self.date.split(".").collect::<Vec<&str>>();
-        let (day, month, year) = (v[0].parse::<u32>()?, v[1].parse::<u32>()?, v[2].parse::<i32>()?);
+        let (day, month, year) = (
+            v[0].parse::<u32>()?,
+            v[1].parse::<u32>()?,
+            v[2].parse::<i32>()?,
+        );
         Ok(Utc.ymd(year, month, day))
     }
 }
