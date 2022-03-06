@@ -6,7 +6,7 @@ use reqwest::{StatusCode, Url};
 pub mod error;
 pub mod mensa;
 
-async fn search(key: &str) -> Result<Plan, MensaError> {
+pub async fn get_week_rampart(key: &str) -> Result<Plan, MensaError> {
     let mut url = Url::parse("https://www.swfr.de/index.php").unwrap();
     let query = format!(
         "id=1400&type=98&tx_swfrspeiseplan_pi1[apiKey]={}&tx_swfrspeiseplan_pi1[ort]=610",
