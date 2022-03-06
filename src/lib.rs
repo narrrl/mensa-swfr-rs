@@ -84,7 +84,7 @@ impl UrlBuilder {
 
     pub fn build(&mut self) -> String {
         self.add_query_para(
-            "tx_swfrspeiseplan_pi1[api_key]",
+            "tx_swfrspeiseplan_pi1[apiKey]",
             String::from(&self.api_key).as_str(),
         );
         self.url.set_query(Some(&self.query));
