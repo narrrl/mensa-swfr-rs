@@ -39,7 +39,7 @@ pub struct Day {
 pub struct Menu {
     pub art: String,
     #[serde(rename = "zusatz")]
-    pub food_type: String,
+    pub food_type: Option<String>,
     pub name: String,
     #[serde(rename = "preis")]
     pub price: Price,
