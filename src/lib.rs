@@ -40,7 +40,6 @@ pub async fn get_week_rampart(key: &str) -> Result<Plan, MensaError> {
         )));
     }
 
-    println!("{}", body);
     let plan: Plan = quick_xml::de::from_str(&body)?;
 
     Ok(plan)
