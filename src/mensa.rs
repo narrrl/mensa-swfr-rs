@@ -6,21 +6,21 @@ use std::{fmt::Debug, error::Error};
 #[serde(rename = "plan")]
 pub struct Plan {
     #[serde(rename = "ort")]
-    place: Place,
+    pub place: Place,
 }
 
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
 #[serde(rename = "ort")]
 pub struct Place {
-    id: String,
-    mensa: Mensa,
+    pub id: String,
+    pub mensa: Mensa,
 }
 
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
 #[serde(rename = "mensa")]
 pub struct Mensa {
     #[serde(rename = "$value")]
-    name: String,
+    pub name: String,
     #[serde(rename = "tagesplan")]
     days: Vec<Day>,
 }
@@ -31,31 +31,31 @@ pub struct Day {
     #[serde(rename = "datum")]
     date: String,
     #[serde(rename = "menue")]
-    menues: Vec<Menu>,
+    pub menues: Vec<Menu>,
 }
 
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
 #[serde(rename = "menue")]
 pub struct Menu {
-    art: String,
+    pub art: String,
     #[serde(rename = "zusatz")]
-    food_type: String,
-    name: String,
+    pub food_type: String,
+    pub name: String,
     #[serde(rename = "preis")]
-    price: Price,
+    pub price: Price,
 }
 
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
 #[serde(rename = "preis")]
 pub struct Price {
     #[serde(rename = "studierende")]
-    price_students: String,
+    pub price_students: String,
     #[serde(rename = "angestellte")]
-    price_workers: String,
+    pub price_workers: String,
     #[serde(rename = "gaeste")]
-    price_guests: String,
+    pub price_guests: String,
     #[serde(rename = "schueler")]
-    price_school: String,
+    pub price_school: String,
 }
 
 impl<'a> Plan {
