@@ -1,5 +1,6 @@
+use chrono::{Weekday, DateTime, Utc, TimeZone, Date, Datelike};
 use serde::{Deserialize, Serialize};
-use std::fmt::Debug;
+use std::{fmt::Debug, error::Error};
 
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
 #[serde(rename = "plan")]
@@ -57,15 +58,6 @@ pub struct Price {
     price_school: String,
 }
 
-pub enum Weekday {
-    Monday = 0,
-    Tuesday = 1,
-    Wednesday = 2,
-    Thursday = 3,
-    Friday = 4,
-    Saturday = 5,
-}
-
 impl<'a> Plan {
     pub fn day(&'a self, day: Weekday) -> Option<&'a Day> {
         self.place.mensa.days.get(day as usize)
@@ -77,5 +69,18 @@ impl<'a> Plan {
 
     pub fn mensa_name(&'a self) -> &'a str {
         &self.place.mensa.name
+    }
+}
+
+
+impl<'a> Day {
+    pub fn weekday(&'a self) -> Result<Weekday, Box<dyn Error>> {
+        Ok(self.to_chrono()?.weekday())
+    }
+
+    pub fn to_chrono(&'a self) -> Result<Date<Utc>, Box<dyn Error>> {
+        let v = self.date.split(".").collect::<Vec<&str>>();
+        let (day, month, year) = (v[0].parse::<u32>()?, v[1].parse::<u32>()?, v[2].parse::<i32>()?);
+        Ok(Utc.ymd(year, month, day))
     }
 }
