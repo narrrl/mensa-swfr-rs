@@ -3,8 +3,8 @@ use mensa::Plan;
 
 use reqwest::{StatusCode, Url};
 
-mod error;
-mod mensa;
+pub mod error;
+pub mod mensa;
 
 async fn search(key: &str) -> Result<Plan, MensaError> {
     let mut url = Url::parse("https://www.swfr.de/index.php").unwrap();
