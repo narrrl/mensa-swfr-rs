@@ -13,3 +13,5 @@ reqwest = "^0"
 humantime = "^2"
 tokio = { version = "^1", features = ["full", "time"] }
 chrono = "^0"
+strum = "^0"
+strum_macros = "^0"

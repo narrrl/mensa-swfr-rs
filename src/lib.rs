@@ -1,7 +1,11 @@
+use std::collections::HashMap;
+
 use error::MensaError;
 use mensa::Plan;
 
 use reqwest::{StatusCode, Url};
+use strum::IntoEnumIterator;
+use strum_macros::EnumIter;
 
 pub mod error;
 pub mod mensa;
@@ -9,11 +13,20 @@ pub mod mensa;
 pub const API_URL: &'static str = "https://www.swfr.de/index.php";
 pub const DEFAULT_QUERY: &'static str = "id=1400&type=98";
 
-pub async fn request_rempart(key: &str) -> Result<Plan, MensaError> {
-    request_mensa(UrlBuilder::new(key).set_place(&MensaPlace::Rempartstraße)).await
+pub async fn request_all(key: &str) -> Result<HashMap<MensaPlace, Plan>, MensaError> {
+    let mut map = HashMap::new();
+    for place in MensaPlace::iter() {
+        let plan = request(UrlBuilder::new(key).set_place(&place)).await?;
+        map.insert(place, plan);
+    }
+    Ok(map)
 }
 
-pub async fn request_mensa(url: &mut UrlBuilder) -> Result<Plan, MensaError> {
+pub async fn request_mensa(place: &MensaPlace, key: &str) -> Result<Plan, MensaError> {
+    request(UrlBuilder::new(key).set_place(place)).await
+}
+
+pub async fn request(url: &mut UrlBuilder) -> Result<Plan, MensaError> {
     let url = url.build();
     let res = match reqwest::get(&url).await {
         Ok(res) => res,
@@ -92,6 +105,7 @@ impl UrlBuilder {
     }
 }
 
+#[derive(PartialEq, EnumIter, Hash, Eq)]
 pub enum MensaPlace {
     Rempartstraße,
     Institutsviertel,
