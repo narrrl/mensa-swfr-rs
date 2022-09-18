@@ -105,7 +105,7 @@ impl UrlBuilder {
     }
 }
 
-#[derive(PartialEq, EnumIter, Hash, Eq)]
+#[derive(PartialEq, EnumIter, Hash, Eq, Clone, Copy)]
 pub enum MensaPlace {
     Rempartstraße,
     Institutsviertel,
