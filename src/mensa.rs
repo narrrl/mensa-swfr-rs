@@ -122,8 +122,35 @@ pub enum Weekday {
     Sun = 6,
 }
 
+impl Weekday {
+    pub fn full_name(&self) -> String {
+        match self {
+            Weekday::Mon => String::from("Monday"),
+            Weekday::Tue => String::from("Tuesday"),
+            Weekday::Wed => String::from("Wednesday"),
+            Weekday::Thu => String::from("Thursday"),
+            Weekday::Fri => String::from("Friday"),
+            Weekday::Sat => String::from("Saturday"),
+            Weekday::Sun => String::from("Sunday"),
+        }
+    }
+}
+
 impl From<ChronoWeekday> for Weekday {
     fn from(chrono_weekday: ChronoWeekday) -> Weekday {
+        match chrono_weekday {
+            ChronoWeekday::Mon => Weekday::Mon,
+            ChronoWeekday::Tue => Weekday::Tue,
+            ChronoWeekday::Wed => Weekday::Wed,
+            ChronoWeekday::Thu => Weekday::Thu,
+            ChronoWeekday::Fri => Weekday::Fri,
+            ChronoWeekday::Sat => Weekday::Sat,
+            ChronoWeekday::Sun => Weekday::Sun,
+        }
+    }
+}
+impl From<&ChronoWeekday> for Weekday {
+    fn from(chrono_weekday: &ChronoWeekday) -> Weekday {
         match chrono_weekday {
             ChronoWeekday::Mon => Weekday::Mon,
             ChronoWeekday::Tue => Weekday::Tue,
