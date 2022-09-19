@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, fmt};
 
 use error::MensaError;
 use mensa::Plan;
@@ -134,5 +134,16 @@ impl TryFrom<&str> for MensaPlace {
             "681" => Ok(MensaPlace::Flugplatz),
             _ => Err(MensaError::ParseMensaPlaceError),
         }
+    }
+}
+
+impl fmt::Display for MensaPlace {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.write_str(match *self {
+            MensaPlace::Rempartstraße => "Rempartstraße",
+            MensaPlace::Institutsviertel => "Institutsviertel",
+            MensaPlace::Littenweiler => "Littenweiler",
+            MensaPlace::Flugplatz => "Flugplatz",
+        })
     }
 }

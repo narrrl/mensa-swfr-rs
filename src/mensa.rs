@@ -1,6 +1,11 @@
 use chrono::{Date, Datelike, TimeZone, Utc, Weekday as ChronoWeekday};
 use serde::{Deserialize, Serialize};
-use std::{collections::HashMap, convert::TryFrom, error::Error, fmt::Debug};
+use std::{
+    collections::HashMap,
+    convert::TryFrom,
+    error::Error,
+    fmt::{self, Debug},
+};
 use strum_macros::EnumIter;
 
 use crate::error::MensaError;
@@ -144,5 +149,19 @@ impl TryFrom<&str> for Weekday {
             "sun" => Ok(Weekday::Sun),
             _ => Err(MensaError::ParseWeekdayError),
         }
+    }
+}
+
+impl fmt::Display for Weekday {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.write_str(match *self {
+            Weekday::Mon => "Mon",
+            Weekday::Tue => "Tue",
+            Weekday::Wed => "Wed",
+            Weekday::Thu => "Thu",
+            Weekday::Fri => "Fri",
+            Weekday::Sat => "Sat",
+            Weekday::Sun => "Sun",
+        })
     }
 }
