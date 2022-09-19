@@ -1,6 +1,9 @@
-use chrono::{Date, Datelike, TimeZone, Utc, Weekday};
+use chrono::{Date, Datelike, TimeZone, Utc, Weekday as ChronoWeekday};
 use serde::{Deserialize, Serialize};
-use std::{collections::HashMap, error::Error, fmt::Debug};
+use std::{collections::HashMap, convert::TryFrom, error::Error, fmt::Debug};
+use strum_macros::EnumIter;
+
+use crate::error::MensaError;
 
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
 #[serde(rename = "plan")]
@@ -81,11 +84,11 @@ impl<'a> Plan {
 }
 
 impl<'a> Day {
-    pub fn weekday(&'a self) -> Result<Weekday, Box<dyn Error>> {
-        Ok(self.to_chrono()?.weekday())
+    pub fn weekday(&'a self) -> Result<Weekday, Box<dyn Error + Send + Sync>> {
+        Ok(self.to_chrono()?.weekday().into())
     }
 
-    pub fn to_chrono(&'a self) -> Result<Date<Utc>, Box<dyn Error>> {
+    pub fn to_chrono(&'a self) -> Result<Date<Utc>, Box<dyn Error + Send + Sync>> {
         let v = self.date.split(".").collect::<Vec<&str>>();
         let (day, month, year) = (
             v[0].parse::<u32>()?,
@@ -93,5 +96,53 @@ impl<'a> Day {
             v[2].parse::<i32>()?,
         );
         Ok(Utc.ymd(year, month, day))
+    }
+}
+
+#[derive(PartialEq, EnumIter, Hash, Eq, Clone, Copy)]
+pub enum Weekday {
+    /// Monday.
+    Mon = 0,
+    /// Tuesday.
+    Tue = 1,
+    /// Wednesday.
+    Wed = 2,
+    /// Thursday.
+    Thu = 3,
+    /// Friday.
+    Fri = 4,
+    /// Saturday.
+    Sat = 5,
+    /// Sunday.
+    Sun = 6,
+}
+
+impl From<ChronoWeekday> for Weekday {
+    fn from(chrono_weekday: ChronoWeekday) -> Weekday {
+        match chrono_weekday {
+            ChronoWeekday::Mon => Weekday::Mon,
+            ChronoWeekday::Tue => Weekday::Tue,
+            ChronoWeekday::Wed => Weekday::Wed,
+            ChronoWeekday::Thu => Weekday::Thu,
+            ChronoWeekday::Fri => Weekday::Fri,
+            ChronoWeekday::Sat => Weekday::Sat,
+            ChronoWeekday::Sun => Weekday::Sun,
+        }
+    }
+}
+
+impl TryFrom<&str> for Weekday {
+    type Error = MensaError;
+    fn try_from(value: &str) -> Result<Weekday, MensaError> {
+        match String::from(value).to_lowercase().as_str() {
+            "mon" => Ok(Weekday::Mon),
+            "tue" => Ok(Weekday::Tue),
+            "wed" => Ok(Weekday::Wed),
+            "thu" => Ok(Weekday::Thu),
+            "fri" => Ok(Weekday::Fri),
+            "sat" => Ok(Weekday::Sat),
+            "sun" => Ok(Weekday::Sun),
+            _ => Err(MensaError::ParseWeekdayError),
+        }
     }
 }

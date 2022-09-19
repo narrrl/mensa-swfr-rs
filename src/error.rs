@@ -7,6 +7,10 @@ pub enum MensaError {
     Failure(String),
     #[error("failed to derive xml")]
     ParseFailure(XMLError),
+    #[error("failed to parse weekday from string slice")]
+    ParseWeekdayError,
+    #[error("failed to parse place from id string slice")]
+    ParseMensaPlaceError,
 }
 
 impl From<XMLError> for MensaError {

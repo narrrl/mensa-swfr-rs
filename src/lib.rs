@@ -82,7 +82,7 @@ impl UrlBuilder {
     }
 
     pub fn set_place<'a>(&'a mut self, place: &MensaPlace) -> &'a mut UrlBuilder {
-        self.add_query_para("tx_swfrspeiseplan_pi1[ort]", &id(place));
+        self.add_query_para("tx_swfrspeiseplan_pi1[ort]", &place.id());
         self
     }
 
@@ -113,11 +113,26 @@ pub enum MensaPlace {
     Flugplatz,
 }
 
-pub fn id(mensa: &MensaPlace) -> String {
-    match mensa {
-        MensaPlace::Rempartstraße => String::from("610"),
-        MensaPlace::Institutsviertel => String::from("620"),
-        MensaPlace::Littenweiler => String::from("630"),
-        MensaPlace::Flugplatz => String::from("681"),
+impl MensaPlace {
+    pub fn id(&self) -> String {
+        match self {
+            MensaPlace::Rempartstraße => String::from("610"),
+            MensaPlace::Institutsviertel => String::from("620"),
+            MensaPlace::Littenweiler => String::from("630"),
+            MensaPlace::Flugplatz => String::from("681"),
+        }
+    }
+}
+
+impl TryFrom<&str> for MensaPlace {
+    type Error = MensaError;
+    fn try_from(value: &str) -> Result<MensaPlace, MensaError> {
+        match value {
+            "610" => Ok(MensaPlace::Rempartstraße),
+            "620" => Ok(MensaPlace::Institutsviertel),
+            "630" => Ok(MensaPlace::Littenweiler),
+            "681" => Ok(MensaPlace::Flugplatz),
+            _ => Err(MensaError::ParseMensaPlaceError),
+        }
     }
 }
