@@ -10,7 +10,7 @@ use strum_macros::EnumIter;
 pub mod error;
 pub mod mensa;
 
-pub const API_URL: &'static str = "https://www.swfr.de/apispeiseplan";
+pub const API_URL: &'static str = "https://www.swfr.de/apispeiseplan?";
 pub const DEFAULT_QUERY: &'static str = "type=98";
 
 pub async fn request_all(key: &str) -> Result<HashMap<MensaPlace, Plan>, MensaError> {
