@@ -10,7 +10,7 @@ use strum_macros::EnumIter;
 pub mod error;
 pub mod mensa;
 
-pub const API_URL: &'static str = "https://www.swfr.de/apispeiseplan?";
+pub const API_URL: &'static str = "https://www.swfr.de/apispeiseplan";
 pub const DEFAULT_QUERY: &'static str = "type=98";
 
 pub async fn request_all(key: &str) -> Result<HashMap<MensaPlace, Plan>, MensaError> {
@@ -82,7 +82,7 @@ impl UrlBuilder {
     }
 
     pub fn set_place<'a>(&'a mut self, place: &MensaPlace) -> &'a mut UrlBuilder {
-        self.add_query_para("tx_swfrspeiseplan_pi1[ort]", &place.id());
+        self.add_query_para("tx_speiseplan_pi1[ort]", &place.id());
         self
     }
 
@@ -97,7 +97,7 @@ impl UrlBuilder {
 
     pub fn build(&mut self) -> String {
         self.add_query_para(
-            "tx_swfrspeiseplan_pi1[apiKey]",
+            "tx_speiseplan_pi1[apiKey]",
             String::from(&self.api_key).as_str(),
         );
         self.url.set_query(Some(&self.query));
