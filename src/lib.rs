@@ -111,6 +111,15 @@ pub enum MensaPlace {
     Institutsviertel,
     Littenweiler,
     Flugplatz,
+    Furtwangen,
+    Offenburg,
+    Gengenbach,
+    Kehl,
+    Schwenningen,
+    Lörrach,
+    MusiKantine,
+    OttoHahnFurtwangen,
+    Trossingen,
 }
 
 impl MensaPlace {
@@ -119,7 +128,16 @@ impl MensaPlace {
             MensaPlace::Rempartstraße => String::from("610"),
             MensaPlace::Institutsviertel => String::from("620"),
             MensaPlace::Littenweiler => String::from("630"),
+            MensaPlace::Furtwangen => String::from("641"),
+            MensaPlace::Offenburg => String::from("651"),
+            MensaPlace::Gengenbach => String::from("652"),
             MensaPlace::Flugplatz => String::from("681"),
+            MensaPlace::Kehl => String::from("661"),
+            MensaPlace::Schwenningen => String::from("671"),
+            MensaPlace::Lörrach => String::from("677"),
+            MensaPlace::MusiKantine => String::from("722"),
+            MensaPlace::OttoHahnFurtwangen => String::from("9012"),
+            MensaPlace::Trossingen => String::from("9019"),
         }
     }
 }
@@ -132,6 +150,15 @@ impl TryFrom<&str> for MensaPlace {
             "620" => Ok(MensaPlace::Institutsviertel),
             "630" => Ok(MensaPlace::Littenweiler),
             "681" => Ok(MensaPlace::Flugplatz),
+            "641" => Ok(MensaPlace::Furtwangen),
+            "651" => Ok(MensaPlace::Offenburg),
+            "652" => Ok(MensaPlace::Gengenbach),
+            "661" => Ok(MensaPlace::Kehl),
+            "671" => Ok(MensaPlace::Schwenningen),
+            "677" => Ok(MensaPlace::Lörrach),
+            "722" => Ok(MensaPlace::MusiKantine),
+            "9012" => Ok(MensaPlace::OttoHahnFurtwangen),
+            "9019" => Ok(MensaPlace::Trossingen),
             _ => Err(MensaError::ParseMensaPlaceError),
         }
     }
@@ -144,6 +171,15 @@ impl fmt::Display for MensaPlace {
             MensaPlace::Institutsviertel => "Institutsviertel",
             MensaPlace::Littenweiler => "Littenweiler",
             MensaPlace::Flugplatz => "Flugplatz",
+            MensaPlace::Furtwangen => "Furtwangen",
+            MensaPlace::Offenburg => "Offenburg",
+            MensaPlace::Gengenbach => "Gengenbach",
+            MensaPlace::Kehl => "Kehl",
+            MensaPlace::Schwenningen => "Schwenningen",
+            MensaPlace::Lörrach => "Lörrach",
+            MensaPlace::MusiKantine => "MusiKantine",
+            MensaPlace::OttoHahnFurtwangen => "Otto-Hahn-Gymnasium Furtwangen",
+            MensaPlace::Trossingen => "Trossingen",
         })
     }
 }
